@@ -13,6 +13,8 @@ def generate_password():
     length = spinbox.get()
     if int(length) > 33:
         length = 32
+    if int(length) < 7:
+        length = 8
     include_uppercase = uppercase_var.get()
     include_lowercase = lowercase_var.get()
     include_numbers = numbers_var.get()
@@ -59,7 +61,7 @@ root.resizable(False, False)
 length_label = tk.Label(root, text="Password Length:(8-32)")
 length_label.grid(row=0, column=0)
 
-spinbox = tk.Spinbox(root, from_=8, to=32, width=5)
+spinbox = tk.Spinbox(root, from_=8, to=32, width=5, value = 12)
 spinbox.grid(row=0, column=1)
 
 # Checkboxes for character types
