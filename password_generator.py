@@ -21,6 +21,8 @@ def generate_password():
     include_symbols = symbols_var.get()
     copy_to_clipboard = clipboard_var.get()
     csv_file = csv_file_var.get()
+    info_clip_label.config(text="")
+    info_csv_label.config(text="")
     characters = ""
     if include_uppercase:
         characters += string.ascii_uppercase
@@ -33,13 +35,16 @@ def generate_password():
 
     password = random.sample(characters,int(length))
     password_string = "".join(password)
-    password_label.config(text=password_string)
+    password_label.config(text=password_string, font=("Arial", 10))
     if copy_to_clipboard:
         pyperclip.copy(password_string)
+        info_clip_label.config(text="Password copied to clipboard", font=("Arial", 8))
+
     if csv_file:
         with open("passwords.csv", "a") as csv_file:
             writer = csv.writer(csv_file)
             writer.writerow([password_string])
+            info_csv_label.config(text="Password saved to CSV file", font=("Arial", 8))
 
 def open_github(event):
     webbrowser.open("https://github.com/ekomlenovic/password_generator")
@@ -55,7 +60,9 @@ def resource_path(relative_path):
 
 root = tk.Tk()
 root.title("Password Generator")
+root.wm_title("Password Generator")
 root.resizable(False, False)
+root.iconbitmap(resource_path("data/DALL_E_preview.ico"))
 
 # Length label and spinbox
 length_label = tk.Label(root, text="Password Length:(8-32)")
@@ -103,15 +110,21 @@ password_label = tk.Label(root, text="")
 password_label.grid(row=5, column=0, columnspan=2)
 
 
+info_clip_label = tk.Label(root, text="")
+info_clip_label.grid(row=6, column=0, columnspan=2)
+
+info_csv_label = tk.Label(root, text="")
+info_csv_label.grid(row=7, column=0, columnspan=2)
+
 quit_button = tk.Button(root, text="Quit", command=root.destroy)
-quit_button.grid(row=6, column=0, columnspan=2)
+quit_button.grid(row=8, column=0, columnspan=2)
 
 # Load Github logo and create label
 path = resource_path("data/github-mark.png")
 logo = PhotoImage(file=path)
 logo = logo.subsample(8, 8)
 github_label = tk.Label(root, image=logo)
-github_label.grid(row=7, column=0, columnspan=2, pady=10)
+github_label.grid(row=9, column=0, columnspan=2, pady=10)
 github_label.bind("<Button-1>", open_github)
 
 root.mainloop()
